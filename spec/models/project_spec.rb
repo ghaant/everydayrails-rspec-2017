@@ -5,12 +5,7 @@ require 'rails_helper'
 RSpec.describe Project, type: :model do
   describe 'validations' do
     before do
-      @user = User.create(
-        first_name: 'Joe',
-        last_name: 'Tester',
-        email: 'joetester@example.com',
-        password: 'dottle-nouveau-pavilion-tights-furze'
-      )
+      @user = FactoryBot.create(:user)
     end
 
     context 'when name is not present' do
@@ -43,12 +38,7 @@ RSpec.describe Project, type: :model do
       end
 
       it 'allows two users to share a project name' do
-        other_user = User.create(
-          first_name: 'Jane',
-          last_name: 'Tester',
-          email: 'janetester@example.com',
-          password: 'dottle-nouveau-pavilion-tights-furze'
-        )
+        other_user = FactoryBot.create(:user, first_name: 'Jane')
 
         other_project = other_user.projects.build(
           name: 'Test Project'
@@ -56,6 +46,33 @@ RSpec.describe Project, type: :model do
 
         expect(other_project).to be_valid
       end
+    end
+  end
+
+  describe 'late status' do
+    it 'is late when the due date is past today' do
+      project = FactoryBot.create(:project, :due_yesterday)
+
+      expect(project).to be_late
+    end
+
+    it 'is on time when the due date is today' do
+      project = FactoryBot.create(:project, :due_today)
+
+      expect(project).to_not be_late
+    end
+
+    it 'is on time when the due date is in the future' do
+      project = FactoryBot.create(:project, :due_tomorrow)
+
+      expect(project).to_not be_late
+    end
+  end
+
+  describe 'associations' do
+    it 'can have many notes' do
+      project = FactoryBot.create(:project, :with_notes)
+      expect(project.notes.length).to eq(5)
     end
   end
 end
