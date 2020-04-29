@@ -9,14 +9,12 @@ RSpec.describe ProjectsController, type: :controller do
 
       it 'responds successfully' do
         sign_in @user
-
         get :index
         expect(response).to be_success
       end
 
       it 'returns a 200 response' do
         sign_in @user
-
         get :index
         expect(response).to have_http_status('200')
       end
@@ -44,7 +42,6 @@ RSpec.describe ProjectsController, type: :controller do
 
       it 'responds successfully' do
         sign_in @user
-
         get :show, params: { id: @project.id }
         expect(response).to be_success
       end
@@ -59,7 +56,6 @@ RSpec.describe ProjectsController, type: :controller do
 
       it 'redirects to the dashboard' do
         sign_in @user
-
         get :show, params: { id: @project.id }
         expect(response).to redirect_to(root_path)
       end
@@ -74,7 +70,6 @@ RSpec.describe ProjectsController, type: :controller do
 
       it 'responds successfully' do
         sign_in @user
-
         get :new
         expect(response).to be_success
       end
@@ -83,13 +78,11 @@ RSpec.describe ProjectsController, type: :controller do
     context 'as a guest' do
       it 'returns a 302 response' do
         get :new
-
         expect(response).to have_http_status('302')
       end
 
       it 'redirects to the sign-in page' do
         get :new
-
         expect(response).to redirect_to('/users/sign_in')
       end
     end
@@ -104,7 +97,6 @@ RSpec.describe ProjectsController, type: :controller do
 
       it 'responds successfully' do
         sign_in @user
-
         get :edit, params: { id: @project.id }
         expect(response).to be_success
       end
@@ -119,7 +111,6 @@ RSpec.describe ProjectsController, type: :controller do
 
       it 'redirects to the dashboard' do
         sign_in @user
-
         get :edit, params: { id: @project.id }
         expect(response).to redirect_to(root_path)
       end
@@ -132,13 +123,11 @@ RSpec.describe ProjectsController, type: :controller do
 
       it 'returns a 302 response' do
         get :edit, params: { id: @project.id }
-
         expect(response).to have_http_status('302')
       end
 
       it 'redirects to the sign-in page' do
         get :edit, params: { id: @project.id }
-
         expect(response).to redirect_to('/users/sign_in')
       end
     end
@@ -154,7 +143,6 @@ RSpec.describe ProjectsController, type: :controller do
         it 'adds a project' do
           project_params = FactoryBot.attributes_for(:project)
           sign_in @user
-
           expect { post :create, params: { project: project_params } }
             .to change(@user.projects, :count).by(1)
         end
@@ -164,7 +152,6 @@ RSpec.describe ProjectsController, type: :controller do
         it 'does not add a project' do
           project_params = FactoryBot.attributes_for(:project, :invalid)
           sign_in @user
-
           expect { post :create, params: { project: project_params } }
             .to_not change(@user.projects, :count)
         end
@@ -175,14 +162,12 @@ RSpec.describe ProjectsController, type: :controller do
       it 'returns a 302 response' do
         project_params = FactoryBot.attributes_for(:project)
         post :create, params: { project: project_params }
-
         expect(response).to have_http_status('302')
       end
 
       it 'redirects to the sign-in page' do
         project_params = FactoryBot.attributes_for(:project)
         post :create, params: { project: project_params }
-
         expect(response).to redirect_to('/users/sign_in')
       end
     end
@@ -199,7 +184,6 @@ RSpec.describe ProjectsController, type: :controller do
         project_params = FactoryBot.attributes_for(:project, name: 'New Project Name')
         sign_in @user
         patch :update, params: { id: @project.id, project: project_params }
-
         expect(@project.reload.name).to eq('New Project Name')
       end
     end
@@ -215,7 +199,6 @@ RSpec.describe ProjectsController, type: :controller do
         project_params = FactoryBot.attributes_for(:project, name: 'New Name')
         sign_in @user
         patch :update, params: { id: @project.id, project: project_params }
-
         expect(@project.reload.name).to eq('Same Old Name')
       end
 
@@ -223,7 +206,6 @@ RSpec.describe ProjectsController, type: :controller do
         project_params = FactoryBot.attributes_for(:project)
         sign_in @user
         patch :update, params: { id: @project.id, project: project_params }
-
         expect(response).to redirect_to(root_path)
       end
     end
@@ -236,14 +218,12 @@ RSpec.describe ProjectsController, type: :controller do
       it 'returns a 302 response' do
         project_params = FactoryBot.attributes_for(:project)
         patch :update, params: { id: @project.id, project: project_params }
-
         expect(response).to have_http_status('302')
       end
 
       it 'redirects to the sign-in page' do
         project_params = FactoryBot.attributes_for(:project)
         patch :update, params: { id: @project.id, project: project_params }
-
         expect(response).to redirect_to('/users/sign_in')
       end
     end
@@ -258,7 +238,6 @@ RSpec.describe ProjectsController, type: :controller do
 
       it 'deletes a project' do
         sign_in @user
-
         expect { delete :destroy, params: { id: @project.id } }
           .to change(@user.projects, :count).by(-1)
       end
@@ -273,7 +252,6 @@ RSpec.describe ProjectsController, type: :controller do
 
       it 'doesn not delete the project' do
         sign_in @user
-
         expect { delete :destroy, params: { id: @project.id } }
           .to_not change(Project, :count)
       end
@@ -281,7 +259,6 @@ RSpec.describe ProjectsController, type: :controller do
       it 'redirects to the dashboar' do
         sign_in @user
         delete :destroy, params: { id: @project.id }
-
         expect(response).to redirect_to(root_path)
       end
     end
@@ -293,13 +270,11 @@ RSpec.describe ProjectsController, type: :controller do
 
       it 'returns a 302 response' do
         delete :destroy, params: { id: @project.id }
-
         expect(response).to have_http_status('302')
       end
 
       it 'redirects to the sign-in page' do
         delete :destroy, params: { id: @project.id }
-
         expect(response).to redirect_to('/users/sign_in')
       end
 
