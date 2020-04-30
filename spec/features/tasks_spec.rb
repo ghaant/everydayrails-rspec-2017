@@ -74,4 +74,24 @@ RSpec.feature "Tasks", type: :feature do
     expect(page).to_not have_css "label#task_#{task.id}.completed"
     expect(task.reload).to_not be_completed
   end
+
+  scenario 'user deletes the task' do
+    user = FactoryBot.create(:user)
+    project = FactoryBot.create(:project, name: 'RSpec tutorial', owner: user)
+    task = project.tasks.create!(name: 'Finish RSpec tutorial')
+
+    visit root_path
+    click_link 'Sign in'
+    fill_in 'Email', with: user.email
+    fill_in 'Password', with: user.password
+    click_button 'Log in'
+
+    expect {
+      click_link project.name
+      within_table('') { click_link 'Delete' }
+
+      expect(current_path).to eq(project_path(project))
+      expect(page).to_not have_content task.name
+    }.to change(project.tasks, :count).by(-1)
+  end
 end
