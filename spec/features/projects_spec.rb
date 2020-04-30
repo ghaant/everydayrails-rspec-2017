@@ -20,5 +20,46 @@ RSpec.feature "Projects", type: :feature do
       expect(page).to have_content 'Test Project'
       expect(page).to have_content "Owner: #{user.name}"
     }.to change(user.projects, :count).by(1)
+
+    visit projects_path
+    click_link 'New Project'
+    click_link 'Cancel'
+
+    expect(current_path).to eq(projects_path)
+  end
+
+  scenario 'user updates the project' do
+    user = FactoryBot.create(:user)
+    project = FactoryBot.create(:project, :due_today, owner: user)
+
+    visit root_path
+    click_link 'Sign in'
+    fill_in 'Email', with: user.email
+    fill_in 'Password', with: user.password
+    click_button 'Log in'
+
+    click_link project.name
+    click_link 'Edit'
+    fill_in 'Name', with: project.name.reverse
+    fill_in 'Description', with: project.description.reverse
+    select 1.year.from_now.year, from: 'project_due_on_1i'
+    select 1.month.from_now.strftime("%B"), from: 'project_due_on_2i'
+    select 1.day.from_now.day, from: 'project_due_on_3i'
+    click_button 'Update Project'
+
+    expect(page).to have_content project.name.reverse
+    expect(page).to have_content project.description.reverse
+    expect(page).to_not have_content project.name
+    expect(page).to_not have_content project.description
+    expect(page).to have_content(
+      1.month.from_now.strftime("%B") + ' ' +
+        1.day.from_now.strftime('%d').to_s + ', ' +
+          1.year.from_now.year.to_s
+    )
+
+    click_link 'Edit'
+    click_link 'Cancel'
+
+    expect(current_path).to eq(project_path(project))
   end
 end
