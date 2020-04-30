@@ -21,11 +21,13 @@ RSpec.feature "Projects", type: :feature do
       expect(page).to have_content "Owner: #{user.name}"
     }.to change(user.projects, :count).by(1)
 
-    visit projects_path
-    click_link 'New Project'
-    click_link 'Cancel'
+    expect {
+      visit projects_path
+      click_link 'New Project'
+      click_link 'Cancel'
 
-    expect(current_path).to eq(projects_path)
+      expect(current_path).to eq(projects_path)
+    }.to_not change(user.projects, :count)
   end
 
   scenario 'user updates the project' do
