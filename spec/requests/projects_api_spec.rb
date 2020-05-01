@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require 'rails_helper'
 
 RSpec.describe 'Projects API', type: :request do
@@ -32,6 +30,8 @@ RSpec.describe 'Projects API', type: :request do
 
   it 'creates a project' do
     user = FactoryBot.create(:user)
+    FactoryBot.create(:project, name: "Sample Project")
+    FactoryBot.create(:project, name: "Second Sample Project", owner: user)
 
     project_attributes = FactoryBot.attributes_for(:project)
 
