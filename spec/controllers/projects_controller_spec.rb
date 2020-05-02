@@ -10,7 +10,10 @@ RSpec.describe ProjectsController, type: :controller do
       it 'responds successfully' do
         sign_in @user
         get :index
-        expect(response).to be_success
+        aggregate_failures do
+          expect(response).to be_success
+          expect(response).to have_http_status('200')
+        end
       end
 
       it 'returns a 200 response' do
