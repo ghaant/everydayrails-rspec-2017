@@ -1,9 +1,10 @@
 require 'rails_helper'
 
 RSpec.feature "Projects", type: :feature do
-  scenario 'user creates a new project' do
-    user = FactoryBot.create(:user)
+  let(:user) { FactoryBot.create(:user) }
+  let!(:project) { FactoryBot.create(:project, :due_today, owner: user) }
 
+  scenario 'user creates a new project' do
     sign_in(user)
 
     visit root_path
@@ -31,9 +32,6 @@ RSpec.feature "Projects", type: :feature do
   end
 
   scenario 'user updates the project' do
-    user = FactoryBot.create(:user)
-    project = FactoryBot.create(:project, :due_today, owner: user)
-
     sign_in(user)
 
     visit root_path
