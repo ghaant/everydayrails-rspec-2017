@@ -7,7 +7,7 @@ RSpec.feature "Tasks", type: :feature do
 
   scenario 'user creates a new task' do
     sign_in(user)
-    visit project_path(project.id)
+    go_to_project 'RSpec tutorial'
 
     expect {
       click_link 'Add Task'
@@ -26,7 +26,7 @@ RSpec.feature "Tasks", type: :feature do
 
   scenario 'user updates the task' do
     sign_in(user)
-    visit project_path(project.id)
+    go_to_project 'RSpec tutorial'
     within_table('') { click_link 'Edit' }
     fill_in 'Name', with: task.name.reverse
     click_button 'Update Task'
@@ -40,29 +40,18 @@ RSpec.feature "Tasks", type: :feature do
     expect(current_path).to eq(project_path(project))
   end
 
-  # scenario 'user toggles a task', js: true do
-  #   task = project.tasks.create!(name: 'Finish RSpec tutorial')
-  #
-  #   visit root_path
-  #   click_link 'Sign in'
-  #   fill_in 'Email', with: user.email
-  #   fill_in 'Password', with: user.password
-  #   click_button 'Log in'
-  #
-  #   click_link 'RSpec tutorial'
-  #   check 'Finish RSpec tutorial'
-  #
-  #   expect(page).to have_css "label#task_#{task.id}.completed"
-  #   expect(task.reload).to be_completed
-  #
-  #   uncheck 'Finish RSpec tutorial'
-  #   expect(page).to_not have_css "label#task_#{task.id}.completed"
-  #   expect(task.reload).to_not be_completed
-  # end
+  scenario 'user toggles a task', js: true do
+    sign_in(user)
+    go_to_project 'RSpec tutorial'
+    complete_task 'Finish RSpec tutorial'
+    expect_complete_task 'Finish RSpec tutorial'
+    undo_complete_task 'Finish RSpec tutorial'
+    expect_incomplete_task 'Finish RSpec tutorial'
+  end
 
   scenario 'user deletes the task' do
     sign_in(user)
-    visit project_path(project.id)
+    go_to_project 'RSpec tutorial'
 
     expect {
       within_table('') { click_link 'Delete' }
@@ -70,5 +59,32 @@ RSpec.feature "Tasks", type: :feature do
       expect(current_path).to eq(project_path(project))
       expect(page).to_not have_content task.name
     }.to change(project.tasks, :count).by(-1)
+  end
+
+  def go_to_project(name)
+    visit root_path
+    click_link name
+  end
+
+  def complete_task(name)
+    check name
+  end
+
+  def undo_complete_task(name)
+    uncheck name
+  end
+
+  def expect_complete_task(name)
+    aggregate_failures do
+      expect(page).to have_css "label.completed", text: name
+      expect(task.reload).to be_completed
+    end
+  end
+
+  def expect_incomplete_task(name)
+    aggregate_failures do
+      expect(page).to_not have_css "label.completed", text: name
+      expect(task.reload).to_not be_completed
+    end
   end
 end
