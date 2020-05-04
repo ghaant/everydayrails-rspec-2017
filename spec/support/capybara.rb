@@ -1,5 +1,12 @@
-Capybara.javascript_driver = :selenium_chrome_headless
+Capybara.register_driver :headless_chrome do |app|
+  options = Selenium::WebDriver::Chrome::Options.new
+  options.add_argument('--headless')
 
-# Use poltergeist/PhantomJS as an alternative to Selenium and Chrome
-# require 'capybara/poltergeist'
-# Capybara.javascript_driver = :poltergeist
+  Capybara::Selenium::Driver.new(
+    app,
+    browser: :chrome,
+    options: options
+  )
+end
+
+Capybara.javascript_driver = :headless_chrome
