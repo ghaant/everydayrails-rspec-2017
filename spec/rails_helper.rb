@@ -71,13 +71,13 @@ RSpec.configure do |config|
   config.include Devise::Test::IntegrationHelpers, type: :request
   config.include Devise::Test::IntegrationHelpers, type: :feature
 
+  # Add support for Paperclip's Shoulda matchers
+  config.include Paperclip::Shoulda::Matchers
+
   # Clean up file uploads when test suite is finished
   config.after(:suite) do
     FileUtils.rm_rf(Dir["#{Rails.root}/spec/test_uploads/"])
   end
-
-  # Add support for Paperclip's Shoulda matchers
-  config.include Paperclip::Shoulda::Matchers
 end
 
 Shoulda::Matchers.configure do |config|

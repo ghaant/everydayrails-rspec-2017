@@ -43,3 +43,8 @@ Rails.application.configure do
   # Keeps files uploaded in tests from polluting the Rails development environment's file uploads
   Paperclip::Attachment.default_options[:path] = "#{Rails.root}/spec/test_uploads/:class/:id_partition/:style.:extension"
 end
+
+# Keep files uploaded in tests from polluting the Rails development
+# environment's file uploads
+Paperclip::Attachment.default_options[:path] = \
+  "#{Rails.root}/spec/test_uploads/:class/:id_partition/:style.:extension"

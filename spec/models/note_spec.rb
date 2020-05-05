@@ -21,15 +21,9 @@ RSpec.describe Note, type: :model do
     expect(note.errors[:message]).to include("can't be blank")
   end
 
-  it 'delegates name to the user who created it' do
-    user = instance_double('user', name: 'Fake User')
-    note = Note.new
-    allow(note).to receive(:user).and_return(user)
+  it { is_expected.to have_attached_file(:attachment) }
 
-    expect(note.user_name).to eq('Fake User')
-  end
-
-  describe 'search message for a term' do
+  describe "search message for a term" do
     let!(:note1) {
       FactoryBot.create(
         :note,
