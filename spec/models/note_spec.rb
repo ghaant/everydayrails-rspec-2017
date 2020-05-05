@@ -4,18 +4,20 @@ RSpec.describe Note, type: :model do
   let(:user) { FactoryBot.create(:user) }
   let(:project) { FactoryBot.create(:project, owner: user) }
 
-  it "is valid with a user, project, and message" do
+  it 'is valid with a user, project, and message' do
     note = Note.new(
-      message: "This is a sample note.",
+      message: 'This is a sample note.',
       user: user,
-      project: project,
+      project: project
     )
+
     expect(note).to be_valid
   end
 
-  it "is invalid without a message" do
+  it 'is invalid without a message' do
     note = Note.new(message: nil)
     note.valid?
+
     expect(note.errors[:message]).to include("can't be blank")
   end
 
@@ -23,40 +25,42 @@ RSpec.describe Note, type: :model do
 
   describe "search message for a term" do
     let!(:note1) {
-      FactoryBot.create(:note,
+      FactoryBot.create(
+        :note,
         project: project,
         user: user,
-        message: "This is the first note.",
+        message: 'This is the first note.'
       )
     }
 
     let!(:note2) {
-      FactoryBot.create(:note,
+      FactoryBot.create(
+        :note,
         project: project,
         user: user,
-        message: "This is the second note.",
+        message: 'This is the second note.'
       )
     }
 
     let!(:note3) {
-      FactoryBot.create(:note,
+      FactoryBot.create(
+        :note,
         project: project,
         user: user,
-        message: "First, preheat the oven.",
+        message: 'First, preheat the oven.'
       )
     }
 
-    context "when a match is found" do
-      it "returns notes that match the search term" do
-        expect(Note.search("first")).to include(note1, note3)
-        expect(Note.search("first")).to_not include(note2)
+    context 'when a match is found' do
+      it 'returns notes that match the search term' do
+        expect(Note.search('first')).to include(note1, note3)
+        expect(Note.search('first')).not_to include(note2)
       end
     end
 
-    context "when no match is found" do
-      it "returns an empty collection" do
-        expect(Note.search("message")).to be_empty
-        expect(Note.count).to eq 3
+    context 'when no match is found' do
+      it 'returns an empty collection' do
+        expect(Note.search('message')).to be_empty
       end
     end
   end
@@ -67,4 +71,6 @@ RSpec.describe Note, type: :model do
     allow(note).to receive(:user).and_return(user)
     expect(note.user_name).to eq "Fake User"
   end
+
+  it { is_expected.to have_attached_file(:attachment) }
 end
