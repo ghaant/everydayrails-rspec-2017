@@ -41,7 +41,7 @@ RSpec.feature "Tasks", type: :system do
   end
 
   it 'toggles a task as a user', js: true do
-    skip 'some problem on Ubuntu'
+    skip 'some problem with chromedriver version'
     sign_in(user)
     go_to_project 'RSpec tutorial'
     complete_task 'Finish RSpec tutorial'
