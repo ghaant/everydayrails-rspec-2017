@@ -9,8 +9,8 @@ RSpec::Matchers.define :have_content_type do |expected|
 
   failure_message do |actual|
     "Expected \"#{content_type(actual.content_type)} " +
-    "(#{actual.content_type})\" to be Content Type " +
-    "\"#{content_type(expected)}\" (#{expected})"
+      "(#{actual.content_type})\" to be Content Type " +
+      "\"#{content_type(expected)}\" (#{expected})"
   end
 
   failure_message_when_negated do |actual|
@@ -21,11 +21,11 @@ RSpec::Matchers.define :have_content_type do |expected|
 
   def content_type(type)
     types = {
-      html: "text/html",
-      json: "application/json",
+      html: 'text/html',
+      json: 'application/json'
     }
-    types[type.to_sym] || "unknown content type"
+    types[type.to_sym] || 'unknown content type'
   end
 end
 
-RSpec::Matchers.alias_matcher :be_content_type , :have_content_type
+RSpec::Matchers.alias_matcher :be_content_type, :have_content_type
