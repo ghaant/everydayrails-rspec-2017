@@ -7,14 +7,14 @@
   <% if @project.completed? %>
     <span class="label label-success">Completed</span>
   <% else %>
-    <%= button_to complete_project_path(@project), method: :patch,
-      form: { style: "display:inline-block;" },
-      class: "btn btn-default btn-sm btn-inline" do %>
+    <%= button_to complete_project_path(@project),
+        method: :patch,
+        form: { style: "display:inline-block;" },
+        class: "btn btn-default btn-sm btn-inline" do %>
       <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
       Complete
     <% end %>
   <% end %>
-
 </h1>
 
 <div class="project-description">
