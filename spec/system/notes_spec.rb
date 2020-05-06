@@ -1,10 +1,10 @@
 require 'rails_helper'
 
-RSpec.feature "Notes", type: :feature do
+RSpec.feature "Notes", type: :system do
   let(:user) { FactoryBot.create(:user) }
   let(:project) { FactoryBot.create(:project, name: 'RSpec tutorial', owner: user) }
 
-  scenario 'user uploads an attachment' do
+  it 'uploads an attachment as a user' do
     sign_in user
     visit project_path(project)
     click_link 'Add Note'
