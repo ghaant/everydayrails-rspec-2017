@@ -292,7 +292,7 @@ RSpec.describe ProjectsController, type: :controller do
 
       describe 'an unsuccessful completion' do
         before do
-          allow_any_instance_of(Project).to receive(:update_attributes!)
+          allow_any_instance_of(Project).to receive(:update_attributes)
             .with(completed: true).and_return(false)
         end
 
